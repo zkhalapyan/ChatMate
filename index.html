@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    
+    <meta name="viewport" content="height=device-height,width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;" />
+
+    <title> ChatMate </title>
+
+    <style type="text/css">
+        @import url("libs/mwf/css/mwf.css");
+        @import url("css/highlight-styles.css");
+    </style>
+
+    <!-- IMPORT PHONEGAP LIBRARY -->
+    <script type="text/javascript" src="libs/cordova/js/bin/core/cordova.js"></script>
+    
+    <!-- IMPORT MWF JAVASCRIPT LIBRARY -->
+    <script type="text/javascript" src="libs/mwf/js/mwf.js"></script>
+    <script type="text/javascript" src="libs/mwf/js/decorator.js"> </script>
+    <script type="text/javascript" src="libs/mwf/js/content.js"> </script>
+    <script type="text/javascript" src="libs/mwf/js/button.js"> </script>
+    <script type="text/javascript" src="libs/mwf/js/form.js"> </script>
+    <script type="text/javascript" src="libs/mwf/js/menu.js"> </script>
+
+    <!-- IMPORT JQUERY AND EXTENSIONS -->   
+    <script type="text/javascript" src="libs/jquery/js/jquery-1.8.0.js"></script>
+    
+    <script type="text/javascript" src="js/ChatMate.js"></script>
+    
+    <!-- IMPORT MODELS -->
+    <script type="text/javascript" src="js/models/ChatRoomModelFactory.js"></script>
+    <script type="text/javascript" src="js/models/ChatRoomModel.js"></script>
+    <script type="text/javascript" src="js/models/PageModel.js"></script>
+    
+    
+    <!-- IMPORT CONTROLLERS -->
+    <script type="text/javascript" src="js/controllers/ChatRoomController.js"></script>
+    <script type="text/javascript" src="js/controllers/ChatRoomsController.js"></script>
+    <script type="text/javascript" src="js/controllers/PageController.js"></script>
+    
+    <!-- IMPORT VIEWS -->
+    <script type="text/javascript" src="js/views/ChatRoomMessagesView.js"></script>
+    <script type="text/javascript" src="js/views/ChatRoomView.js"></script>
+    <script type="text/javascript" src="js/views/ListView.js"></script>
+    <script type="text/javascript" src="js/views/NewChatRoomMessageView.js"></script>
+    <script type="text/javascript" src="js/views/PageView.js"></script>
+    
+    <!-- IMPORT UTILITIES -->    
+    <script type="text/javascript" src="js/utils/LocalMap.js"></script>
+    <script type="text/javascript" src="js/utils/UUIDGen.js"></script>
+    <script type="text/javascript" src="js/utils/DeviceDetection.js"></script>
+    <script type="text/javascript" src="js/utils/TouchEnabledItemModel.js"></script>
+    
+    <!-- IMPORT Services -->    
+    <script type="text/javascript" src="js/services/ChatService.js"></script>
+    
+    <!-- IMPORT INITIALIZERS -->
+    
+    <script type="text/javascript" src="js/init/init.ChatRoomMessages.js"></script>
+    <script type="text/javascript" src="js/init/init.ChatRooms.js"></script>
+    <script type="text/javascript" src="js/init/init.NewChatRoom.js"></script>
+    <script type="text/javascript" src="js/init/init.js"></script>
+    
+    
+</head>
+<body>
+    
+    <a class="button-light not-basic" id="button-top"></a>
+    
+    <h1 id="header">
+        <a id="header-link">
+            <img src="img/home-icon.png" alt="ohmage" width="30" height="30" style="padding-left:3px; padding-top:3px;"/>
+            <span id="header-title"></span>
+        </a>
+    </h1>
+
+    <div id="page-canvas"></div>
+
+    <div id="footer">
+        <p>Copyright &copy; 2012 MobilizeLabs<br />
+    </div>
+
+</body>
+</html>

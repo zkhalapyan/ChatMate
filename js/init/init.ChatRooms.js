@@ -1,0 +1,10 @@
+
+chatmate.init.ChatRooms = (function() {
+    return function() {
+        var chatRoomsController = chatmate.controllers.ChatRoomsController();
+        var page = chatmate.models.PageModel("Chat Rooms");
+        page.setTopButton("Refresh", chatRoomsController.refreshChatRoomList);
+        page.setPageContent( chatRoomsController.renderChatRoomList() );
+        chatmate.controllers.PageController.render(page);
+    };
+}());

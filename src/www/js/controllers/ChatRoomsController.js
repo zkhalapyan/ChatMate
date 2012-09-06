@@ -40,7 +40,10 @@ chatmate.controllers.ChatRoomsController = (function() {
         };
         
         chatmate.services.ChatService.setOnMessageCallback(function( packet ) {
-            that.addChatRoom( packet.room );    
+            if( !chatmate.models.ChatRoomModelFactory.chatRoomExists( packet.room ) ) {
+                that.addChatRoom( packet.room );    
+            }
+            
         });
         
         return that;

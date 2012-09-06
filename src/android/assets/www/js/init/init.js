@@ -14,8 +14,28 @@ $( document ).ready( function() {
     
     chatmate.controllers.PageController.openChatRoomsView();
     
-    // Init chat service.
-    chatmate.services.ChatService.run();
+    
+    if( DeviceDetection.isDeviceAndroid() ) {
+        
+        var androidBackButtonCallback = function() {
+            if( chatmate.controllers.PageController.canGoBack() ) {
+                console.log("Go back!");
+                chatmate.controllers.PageController.goBack();
+            } else {
+                navigator.app.exitApp();
+            }
+        };
+        
+        var setBackButtonHandling = function() {
+            document.addEventListener("backbutton", androidBackButtonCallback, true);
+        };
+        
+        document.addEventListener("deviceready", setBackButtonHandling, false);
+    } else {
+        // Init chat service.
+        chatmate.services.ChatService.run();
+    
+    }
 
 
 });

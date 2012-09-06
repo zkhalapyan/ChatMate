@@ -11,7 +11,6 @@ chatmate.models.PageModel = (function(){
         
         var topButtonLabel;
         
-        
         that.setPageContent = function( newPageContent ) {
             pageContent = newPageContent;
         };
@@ -19,7 +18,6 @@ chatmate.models.PageModel = (function(){
         that.getContent = function() {
             return pageContent;
         };
-        
         
         that.setPageTitle = function( newPageTitle ) {
             pageTitle = newPageTitle;

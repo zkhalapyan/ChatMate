@@ -6,23 +6,25 @@ chatmate.controllers.ChatRoomsController = (function() {
         
         var chatRoomsMenuView = null;
         
+        var openChatRoomCallback = function( title ) {
+            return function() {
+                chatmate.controllers.PageController.openChatRoomPage( {
+                    title : title
+                });
+            };
+        };
+        
         that.addChatRoom = function( chatRoomTitle ) {
             console.log(chatRoomsMenuView);
             if ( chatRoomsMenuView !== null ) {
-                chatRoomsMenuView.addItem( chatRoomTitle );
+                chatRoomsMenuView.addItem( chatRoomTitle,  openChatRoomCallback( chatRoomTitle ) );
             }
         };
         
         that.renderChatRoomList = function() {
             var chatRooms = chatmate.models.ChatRoomModelFactory.getAllActiveChatRooms();
             var chatRoomList = [];
-            var openChatRoomCallback = function( title ) {
-                return function() {
-                    chatmate.controllers.PageController.openChatRoomPage( {
-                        title : title
-                    });
-                };
-            };
+       
             for( var title in chatRooms) {
                 chatRoomList.push ( {
                     label    : title,
@@ -37,10 +39,9 @@ chatmate.controllers.ChatRoomsController = (function() {
             return container;
         };
         
-        chatmate.services.ChatService.setOnMessageCallback(function( packet ){
-           that.addChatRoom(packet.room);
+        chatmate.services.ChatService.setOnMessageCallback(function( packet ) {
+            that.addChatRoom( packet.room );    
         });
-        
         
         return that;
         

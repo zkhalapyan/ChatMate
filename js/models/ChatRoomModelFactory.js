@@ -8,8 +8,12 @@ chatmate.models.ChatRoomModelFactory = (function() {
         chatRoomModels[ chatRoomModel.getTitle() ] = chatRoomModel;
     };
     
+    that.chatRoomExists = function( title ) {
+        return typeof( chatRoomModels[ title ] ) !== "undefined";
+    };
+    
     that.getChatRoomModel = function( title ) {
-        if( typeof( chatRoomModels[ title ] ) === "undefined") {
+        if( !that.chatRoomExists( title ) ) {
             that.addChatRoomModel( chatmate.models.ChatRoomModel( title ) );
         }
         return chatRoomModels[ title ];

@@ -11,6 +11,8 @@ chatmate.views.ChatRoomView = (function() {
             var newTitle = document.getElementById("chat-room-title-input").value;
             if( newTitle.length === 0 ) {
                 alert( "Sorry, no invalid titles. ")
+            } else if( chatmate.models.ChatRoomModelFactory.chatRoomExists( newTitle ) ) {
+                alert ( "Sorry, no duplicate chat room title." );
             } else {
                 chatRoomModel.setTitle( newTitle );
                 chatRoomController.saveChatRoomCallback();

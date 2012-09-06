@@ -33,7 +33,6 @@ wsServer.on('connection', function( ws ) {
     console.log((new Date()) + " Accepted connection from client.");
     clients.push(ws);
     
-    
     ws.on('message', function( message ) {
         console.log((new Date()) + "Received messagge: " + message);
         for(var i = 0; i < clients.length; i++){

@@ -5,19 +5,33 @@ chatmate.views.ListView = (function() {
         
         var that = {};
         
+        var menu = null;
+        
+        var isEmptyList = false;
+        
+        that.addItem = function( label, callback ) {
+            if( menu !== null ) {
+                if( isEmptyList ) {
+                    menu.removeMenuItemAt( 0 );
+                    isEmptyList = false;
+                }
+                var menuItem = menu.addMenuLinkItem ( label );
+                if( typeof( callback ) !== "undefined" ) {
+                    TouchEnabledItemModel.bindTouchEvent(menuItem, menuItem, callback, "menu-highlight");    
+                }   
+            }
+        };
+        
         that.render = function() {
-            var menu = mwf.decorator.Menu(title);
+            menu = mwf.decorator.Menu( title );
             
             if( list.length === 0 ) {
                 menu.addMenuLinkItem( emptyListMessage );
+                isEmptyList = true;
                 
             } else {
-                var menuItem, i = 0;
-                for( ; i < list.length; i++ ) { 
-                    menuItem = menu.addMenuLinkItem ( list[i].label );
-                    if( typeof( list[i].callback ) !== "undefined" ) {
-                        TouchEnabledItemModel.bindTouchEvent(menuItem, menuItem, list[i].callback, "menu-highlight");    
-                    }   
+                for( var i = 0; i < list.length; i++ ) { 
+                    that.addItem( list[i].label, list[i].callback );
                 }
             }
             

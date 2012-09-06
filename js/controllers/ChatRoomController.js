@@ -22,7 +22,7 @@ chatmate.controllers.ChatRoomController = (function() {
         };
         
         that.saveChatRoomCallback = function() {
-          chatRoomModel.save();  
+          chatmate.models.ChatRoomModelFactory.addChatRoomModel( chatRoomModel );
           chatmate.controllers.PageController.openChatRoomsView();
         };
         
@@ -32,7 +32,6 @@ chatmate.controllers.ChatRoomController = (function() {
         };
         
         that.addMessage = function( message ) {
-            chatRoomModel.addMessage( message );
             if( chatRoomMessagesView !== null ) {
                 chatRoomMessagesView.addMessage( message );
             }

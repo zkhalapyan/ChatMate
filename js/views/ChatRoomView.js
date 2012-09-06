@@ -25,6 +25,11 @@ chatmate.views.ChatRoomView = (function() {
             var inputBox = chatRoomFormView.addTextBox("chat-room-title-input", "chat-room-title-input");
             inputBox.value = chatRoomModel.getTitle();
             
+            $( chatRoomFormView ).submit(function( e ) {
+                e.preventDefault();
+                saveChatRoomCallback();
+            });
+            
             var container = document.createElement('div');
             container.appendChild(chatRoomFormView);
             container.appendChild(mwf.decorator.DoubleClickButton("Cancel", chatmate.controllers.PageController.openChatRoomsView, "Save", saveChatRoomCallback));

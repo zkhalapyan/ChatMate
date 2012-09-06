@@ -1,27 +1,21 @@
 chatmate.models.ChatRoomModel = (function() {
     
-    var chatRooms = {};
-    
     return function( title ) {
         
         var that = {};
         
         var messages = [];
         
+        var deleted = false;
+        
         that.getTitle = function(){
             return title;
         };
         
         that.setTitle = function( newTitle ) {
-            that.deleteRoom();
             title = newTitle;
-            that.save();
         };
-        
-        that.getAllChatRooms = function() {
-            return chatRooms;
-        };
-        
+  
         that.addMessage = function ( message ) {
             messages.push( message );
         };
@@ -30,15 +24,12 @@ chatmate.models.ChatRoomModel = (function() {
             return messages;
         };
         
-        that.save = function() {
-            chatRooms[ title ] = that;
+        that.isDeleted = function() {
+            return deleted;
         };
         
         that.deleteRoom = function() {
-            if( typeof( chatRooms[ title ] ) !== "undefined" ) {
-                delete chatRooms[title];
-            }
-            
+            deleted = true;
         };
         
         return that;

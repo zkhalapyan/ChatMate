@@ -12,15 +12,15 @@ var DeviceDetection = (function(){
     
     var userAgent = navigator.userAgent;
     
-    var matchUserAgent = function(agentRegexp) {
+    var matchUserAgent = function (agentRegexp) {
         return userAgent.match(agentRegexp);
     };
     
-    that.isOnDevice = function() {
+    that.isOnDevice = function () {
         return matchUserAgent( /(iPhone|iPod|iPad|Android|BlackBerry)/ );
     };
 
-    that.isDeviceiOS = function() {
+    that.isDeviceiOS = function () {
         return matchUserAgent( /(iPhone|iPod|iPad)/ );
     };
 

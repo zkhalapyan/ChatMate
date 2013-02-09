@@ -1,11 +1,14 @@
 var UUIDGen = {
 
-    generate : function(){
+    generate : function () {
+        "use strict";
+
         // http://www.ietf.org/rfc/rfc4122.txt
-        var s = [];
-        var hexDigits = "0123456789abcdef";
-        
-        for (var i = 0; i < 36; i++) {
+        var s = [],
+            hexDigits = "0123456789abcdef",
+            i;
+
+        for (i = 0; i < 36; i += 1) {
             s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
         }
 
@@ -18,4 +21,4 @@ var UUIDGen = {
 
         return s.join("");
     }
-}
+};

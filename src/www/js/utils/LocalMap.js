@@ -1,20 +1,22 @@
 /**
  * The class is designed to facilitate flexible permanent storage of key value 
- * pairs utilzing HTML5 localStorage.
+ * pairs utilizing HTML5 localStorage.
  *  
  * @class LocalMap
  * @author Zorayr Khalapyan
  * @version 7/30/2012
  */
 var LocalMap = function (name) {
+    "use strict";
+
     var that = {};
 
-    //Prevent compatability issues in different execution environments.
-    if (typeof (localStorage) === "undefined") {
-        localStorage = {};
+    //Prevent compatibility issues in different execution environments.
+    if (localStorage === undefined) {
+        var localStorage = {};
     }
 
-    if (typeof (localStorage[name]) === "undefined") {
+    if (localStorage[name] === undefined) {
         localStorage[name] = JSON.stringify({});
     }
 
@@ -33,8 +35,8 @@ var LocalMap = function (name) {
     };
 
     that.importMap = function (object) {
-        var map = that.getMap();
-        var key;
+        var map = that.getMap(),
+            key;
         for (key in object) {
             if (object.hasOwnProperty(key)) {
                 map[key] = object[key];
@@ -45,14 +47,17 @@ var LocalMap = function (name) {
 
     that.get = function (name) {
         var map = that.getMap();
-        return typeof(map[name]) !== "undefined" ? map[name] : null;
+        return map[name] !== undefined ? map[name] : null;
     };
-    
+
     that.length = function () {
-        var map = that.getMap();
-        var size = 0, key;
+        var map = that.getMap(),
+            size = 0,
+            key;
         for (key in map) {
-            if (map.hasOwnProperty(key)) size++;
+            if (map.hasOwnProperty(key)) {
+                size += 1;
+            }
         }
         return size;
     };
@@ -62,7 +67,7 @@ var LocalMap = function (name) {
     };
 
     that.isSet = function (name) {
-        return that.get(name) != null;
+        return that.get(name) !== null;
     };
 
     that.release = function (name) {
@@ -78,13 +83,16 @@ var LocalMap = function (name) {
 };
 
 LocalMap.destroy = function () {
-    for (var item in localStorage) {
+    "use strict";
+    var item;
+    for (item in localStorage) {
         if (localStorage.hasOwnProperty(item)) {
-            delete localStorage[item];    
+            delete localStorage[item];
         }
-    }    
+    }
 };
 
 LocalMap.exists = function (name) {
+    "use strict";
     return (localStorage[name]) ? true : false;
 };

@@ -1,55 +1,53 @@
 
-chatmate.models.PageModel = (function(){
-    
-    return function( pageTitle, pageParams ){
-        
+chatmate.models.PageModel = (function () {
+    "use strict";
+    return function (pageTitle, pageParams) {
+
         var that = {};
-        
+
         var pageContent;
-        
+
         var topButtonCallback;
-        
+
         var topButtonLabel;
-        
-        that.setPageContent = function( newPageContent ) {
+
+        that.setPageContent = function (newPageContent) {
             pageContent = newPageContent;
         };
-        
-        that.getContent = function() {
+
+        that.getContent = function () {
             return pageContent;
         };
-        
-        that.setPageTitle = function( newPageTitle ) {
+
+        that.setPageTitle = function ( newPageTitle ) {
             pageTitle = newPageTitle;
         };
-        
-        that.getPageTitle = function() {
+
+        that.getPageTitle = function () {
             return pageTitle;
         };
-        
-        
-        that.setPageParams = function ( newPageParams ) {
+
+        that.setPageParams = function (newPageParam) {
             pageParams = newPageParams;
         };
-        
-        that.getPageParams = function() {
+
+        that.getPageParams = function () {
             return pageParams;
         };
-        
-        
-        that.setTopButton = function( newTopButtonLabel, newTopButtonCallback ) {
+
+        that.setTopButton = function (newTopButtonLabel, newTopButtonCallback) {
             topButtonLabel    = newTopButtonLabel;
             topButtonCallback = newTopButtonCallback;
         };
-        
-        that.getTopButtonLabel = function() {
+
+        that.getTopButtonLabel = function () {
             return topButtonLabel;
         };
-        
-        that.getTopButtonCallback = function() {
+
+        that.getTopButtonCallback = function () {
             return topButtonCallback;
         };
-        
+
         return that;
     };
 }());

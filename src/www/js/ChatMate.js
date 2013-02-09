@@ -1,5 +1,6 @@
 
 var chatmate = {
+    config      : {},
     init        : {},
     models      : {},
     controllers : {},

@@ -3,7 +3,7 @@ chatmate.services.ChatService = (function () {
     "use strict";
     var that = {};
 
-    var serviceURL = "ws://shocking-apps.com:3000";
+    var serviceURL = "ws://localhost:3000";
 
     var messageQueue = [];
     var socket = null;
@@ -12,6 +12,7 @@ chatmate.services.ChatService = (function () {
 
     var onOpenHandler = function (e) {
         console.log("ChatService: Opened connection.");
+        socket.binaryType = "arraybuffer";
         isSocketOpen = true;
     };
 
@@ -42,7 +43,7 @@ chatmate.services.ChatService = (function () {
         }
 
         socket.onerror = function (e) {
-            console.log("ChatService: Error occured with the socket.");
+            console.log("ChatService: Error occurred with the socket.");
             console.log(e);
         };
 
@@ -57,7 +58,6 @@ chatmate.services.ChatService = (function () {
             room    : chatRoomModel.getTitle(),
             message : message
         };
-
         if (isSocketOpen) {
             console.log("ChatService: Sent message: ", packet);
             socket.send(JSON.stringify(packet));

@@ -2,6 +2,8 @@
 $(document).ready(function () {
     "use strict";
 
+    var logger = chatmate.utils.Logger();
+
     chatmate.services.ChatServiceInitializer();
 
     // Page initializer for the home icon.
@@ -21,7 +23,7 @@ $(document).ready(function () {
 
         var androidBackButtonCallback = function () {
             if (chatmate.controllers.PageController.canGoBack()) {
-                console.log("Go back!");
+                logger.info("Go back invoked!");
                 chatmate.controllers.PageController.goBack();
             } else {
                 navigator.app.exitApp();

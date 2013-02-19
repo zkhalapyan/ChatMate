@@ -15,14 +15,14 @@ chatmate.services.ChatServiceInitializer = function () {
         var isSocketOpen = false;
 
         var onOpenHandler = function (e) {
-            console.log("ChatService: Opened connection.");
+            logger.info("Opened connection.");
             socket.binaryType = "arraybuffer";
             isSocketOpen = true;
         };
 
         var onMessageHandler = function (e) {
             var packet = $.parseJSON(e.data);
-            console.log("ChatService: Received message: " + e.data);
+            logger.info("Received message: " + e.data);
 
             var chatRoomModel = chatmate.models.ChatRoomModelFactory.getChatRoomModel(packet.room);
             chatRoomModel.addMessage(packet.message);

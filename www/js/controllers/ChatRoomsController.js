@@ -17,7 +17,6 @@ chatmate.controllers.ChatRoomsController = (function () {
         };
 
         that.addChatRoom = function (chatRoomTitle) {
-            console.log(chatRoomsMenuView);
             if (chatRoomsMenuView !== null) {
                 chatRoomsMenuView.addItem(chatRoomTitle,  openChatRoomCallback(chatRoomTitle));
             }

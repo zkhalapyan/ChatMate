@@ -9,6 +9,296 @@ var chatmate = {
     utils       : {}
 };
 
+/**
+ * Memoization construct for caching namespace:key->value objects.
+ *
+ * @constructor CacheService
+ * @author Zorayr Khalapyan
+ */
+chatmate.utils.CacheService = (function () {
+    "use strict";
+
+    var DEFAULT_NAMESPACE = 'global';
+
+    var cache = {};
+
+    return function (namespace) {
+
+        var that = {};
+
+        that.isSet = function (key) {
+            return cache[namespace][key] !== undefined;
+        };
+
+        that.set = function (key, value) {
+            cache[namespace][key] = value;
+        };
+
+        that.remove = function (key) {
+            if (that.isSet(key)) {
+                delete cache[namespace][key];
+            }
+        };
+
+        that.removeAll = function () {
+            cache[namespace] = {};
+        };
+
+        //Initialize cache.
+        (function () {
+            if (namespace === undefined) {
+                namespace = DEFAULT_NAMESPACE;
+            }
+
+            if (cache[namespace] === undefined) {
+                cache[namespace] = {};
+            }
+
+        }());
+
+        return that;
+    };
+}());
+/**
+ * The class encapsulates and facilitates device detection based on the current
+ * device's user agent string.
+ *
+ * @class DeviceDetection
+ * @author Zorayr Khalapyan
+ * @version 02/08/2013
+ */
+chatmate.utils.DeviceDetection = (function () {
+    "use strict";
+    var that = {};
+
+    var userAgent = navigator.userAgent;
+
+    var documentURL = document.URL;
+
+    var matchUserAgent = function (agentRegexp) {
+        return userAgent.match(agentRegexp);
+    };
+
+    /**
+     * Returns true if the user is on a mobile device.
+     */
+    that.isOnDevice = function () {
+        return matchUserAgent(/(iPhone|iPod|iPad|Android|BlackBerry)/);
+    };
+
+    /**
+     * Returns true if the user is currently on an iPhone, iPod, or an iPad.
+     */
+    that.isDeviceiOS = function () {
+        return matchUserAgent(/(iPhone|iPod|iPad)/);
+    };
+
+    /**
+     * Returns true if the user is currently on an Android device.
+     */
+    that.isDeviceAndroid = function () {
+        return matchUserAgent(/(Android)/);
+    };
+
+    /**
+     * Returns true if the current application is running on a Cordova build.
+     */
+    that.isNativeApplication = function () {
+        return documentURL.indexOf('http://') === -1 &&
+            documentURL.indexOf('https://') === -1;
+    };
+
+    /**
+     * The method sets the current user agent string and can be used for agent
+     * spoofing or for testing.
+     */
+    that.setUserAgent = function (newUserAgent) {
+        userAgent = newUserAgent;
+    };
+
+    /**
+     * The method sets the current document URL string and can be used for
+     * testing native application detection.
+     */
+    that.setDocumentURL = function (newDocumentURL) {
+        documentURL = newDocumentURL;
+    };
+
+    return that;
+
+}());
+/**
+ * The class is designed to facilitate flexible permanent storage of key value 
+ * pairs utilizing HTML5 localStorage.
+ *  
+ * @class LocalMap
+ * @author Zorayr Khalapyan
+ * @version 7/30/2012
+ */
+chatmate.utils.LocalMap = function (name) {
+    "use strict";
+
+    var that = {};
+
+    if (localStorage[name] === undefined) {
+        localStorage[name] = JSON.stringify({});
+    }
+
+    var setMap = function (map) {
+        localStorage[name] = JSON.stringify(map);
+    };
+
+    that.getMap = function () {
+        return JSON.parse(localStorage[name]);
+    };
+
+    that.set = function (name, object) {
+        var map = that.getMap();
+        map[name] = object;
+        setMap(map);
+    };
+
+    that.importMap = function (object) {
+        var map = that.getMap(),
+            key;
+        for (key in object) {
+            if (object.hasOwnProperty(key)) {
+                map[key] = object[key];
+            }
+        }
+        setMap(map);
+    };
+
+    that.get = function (name) {
+        var map = that.getMap();
+        return map[name] !== undefined ? map[name] : null;
+    };
+
+    that.length = function () {
+        var map = that.getMap(),
+            size = 0,
+            key;
+        for (key in map) {
+            if (map.hasOwnProperty(key)) {
+                size += 1;
+            }
+        }
+        return size;
+    };
+
+    that.erase = function () {
+        localStorage[name] = JSON.stringify({});
+    };
+
+    that.isSet = function (name) {
+        return that.get(name) !== null;
+    };
+
+    that.release = function (name) {
+        var map = that.getMap();
+        if (map[name]) {
+            delete map[name];
+        }
+        setMap(map);
+    };
+
+    return that;
+
+};
+
+chatmate.utils.LocalMap.destroy = function () {
+    "use strict";
+    var item;
+    for (item in localStorage) {
+        if (localStorage.hasOwnProperty(item)) {
+            delete localStorage[item];
+        }
+    }
+};
+
+chatmate.utils.LocalMap.exists = function (name) {
+    "use strict";
+    return (localStorage[name]) ? true : false;
+};
+
+
+chatmate.utils.Logger = (function () {
+    "use strict";
+
+    var formatOutput = function (namespace, message) {
+        return namespace + ": " + message;
+    };
+
+    var log = function (namespace, message) {
+        console.log(formatOutput(namespace, message));
+    };
+
+    var debug = function (namespace, message) {
+        console.debug(formatOutput(namespace, message));
+    };
+
+    var warn = function (namespace, message) {
+        console.warn(formatOutput(namespace, message));
+    };
+
+    var error = function (namespace, message) {
+        console.error(formatOutput(namespace, message));
+    };
+
+    var info = function (namespace, message) {
+        console.info(formatOutput(namespace, message));
+    };
+
+    return function (namespace) {
+        var that = {};
+
+        that.log = function (message) {
+            log(namespace, message);
+        };
+
+        that.debug = function (message) {
+            debug(namespace, message);
+        };
+
+        that.warn = function (message) {
+            warn(namespace, message);
+        };
+
+        that.error = function (message) {
+            error(namespace, message);
+        };
+
+        that.info = function (message) {
+            info(namespace, message);
+        };
+
+        return that;
+    };
+}());
+chatmate.utils.UUIDGen = {
+
+    generate : function () {
+        "use strict";
+
+        // http://www.ietf.org/rfc/rfc4122.txt
+        var s = [],
+            hexDigits = "0123456789abcdef",
+            i;
+
+        for (i = 0; i < 36; i += 1) {
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+        }
+
+        // Bits 12-15 of the time_hi_and_version field to 0010.
+        s[14] = "4";
+
+        // Bits 6-7 of the clock_seq_hi_and_reserved to 01.
+        s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+        s[8] = s[13] = s[18] = s[23] = "-";
+
+        return s.join("");
+    }
+};
 
 chatmate.controllers.ChatRoomController = (function () {
     "use strict";
@@ -83,7 +373,6 @@ chatmate.controllers.ChatRoomsController = (function () {
         };
 
         that.addChatRoom = function (chatRoomTitle) {
-            console.log(chatRoomsMenuView);
             if (chatRoomsMenuView !== null) {
                 chatRoomsMenuView.addItem(chatRoomTitle,  openChatRoomCallback(chatRoomTitle));
             }
@@ -128,6 +417,8 @@ chatmate.controllers.PageController = (function () {
 
     var pageCanvas = null;
 
+    var logger = chatmate.utils.Logger("PageController");
+
     var getPageCanvas = function () {
         if (pageCanvas === null) {
             pageCanvas = document.getElementById("page-canvas");
@@ -136,7 +427,7 @@ chatmate.controllers.PageController = (function () {
     };
 
     var displayPage = function (pageModel) {
-        console.log("PageController: Displaying page " + pageModel.getPageTitle());
+        logger.info("Displaying page " + pageModel.getPageTitle() + ".");
         var pageView = chatmate.models.PageView(pageModel);
         var canvas = getPageCanvas();
         canvas.innerHTML = "";
@@ -148,7 +439,7 @@ chatmate.controllers.PageController = (function () {
     };
 
     that.render = function (pageModel) {
-        console.log("PageController: Adding page model " + pageModel.getPageTitle() + " to history stack.");
+        logger.info("Adding page model " + pageModel.getPageTitle() + " to history stack.");
         pageHistoryStack.push(pageModel);
         displayPage(pageModel);
     };
@@ -159,7 +450,7 @@ chatmate.controllers.PageController = (function () {
 
     that.goBack = function () {
         pageHistoryStack.pop();
-        console.log("PageController: goBack() invoked.");
+        logger.info("goBack() invoked.");
         displayPage(pageHistoryStack[pageHistoryStack.length - 1]);
     };
 
@@ -205,6 +496,8 @@ chatmate.init.NewChatRoom = (function () {
 $(document).ready(function () {
     "use strict";
 
+    var logger = chatmate.utils.Logger();
+
     chatmate.services.ChatServiceInitializer();
 
     // Page initializer for the home icon.
@@ -224,7 +517,7 @@ $(document).ready(function () {
 
         var androidBackButtonCallback = function () {
             if (chatmate.controllers.PageController.canGoBack()) {
-                console.log("Go back!");
+                logger.info("Go back invoked!");
                 chatmate.controllers.PageController.goBack();
             } else {
                 navigator.app.exitApp();
@@ -390,14 +683,14 @@ chatmate.services.ChatServiceInitializer = function () {
         var isSocketOpen = false;
 
         var onOpenHandler = function (e) {
-            console.log("ChatService: Opened connection.");
+            logger.info("Opened connection.");
             socket.binaryType = "arraybuffer";
             isSocketOpen = true;
         };
 
         var onMessageHandler = function (e) {
             var packet = $.parseJSON(e.data);
-            console.log("ChatService: Received message: " + e.data);
+            logger.info("Received message: " + e.data);
 
             var chatRoomModel = chatmate.models.ChatRoomModelFactory.getChatRoomModel(packet.room);
             chatRoomModel.addMessage(packet.message);
@@ -665,54 +958,51 @@ chatmate.utils.LocalMap.exists = function (name) {
 chatmate.utils.Logger = (function () {
     "use strict";
 
-    var formatOutput = function (namespace) {
-        return namespace + ": ";
+    var formatOutput = function (namespace, message) {
+        return namespace + ": " + message;
     };
 
-    var log = function (namespace) {
-        console.log(formatOutput(namespace));
+    var log = function (namespace, message) {
+        console.log(formatOutput(namespace, message));
     };
 
-    var debug = function (namespace) {
-        console.debug(formatOutput(namespace));
+    var debug = function (namespace, message) {
+        console.debug(formatOutput(namespace, message));
     };
 
-    var warn = function (namespace) {
-        console.warn(formatOutput(namespace), arguments);
+    var warn = function (namespace, message) {
+        console.warn(formatOutput(namespace, message));
     };
 
-    var error = function (namespace) {
-        console.error(formatOutput(namespace), arguments);
+    var error = function (namespace, message) {
+        console.error(formatOutput(namespace, message));
     };
 
-    var info = function (namespace) {
-        console.log(typeof arguments);
-        console.log(arguments);
-        console.log.apply(console, arguments);
-        console.info(formatOutput(namespace), arguments);
+    var info = function (namespace, message) {
+        console.info(formatOutput(namespace, message));
     };
 
     return function (namespace) {
         var that = {};
 
-        that.log = function () {
-            log(namespace);
+        that.log = function (message) {
+            log(namespace, message);
         };
 
-        that.debug = function () {
-            debug(namespace);
+        that.debug = function (message) {
+            debug(namespace, message);
         };
 
-        that.warn = function () {
-            warn(namespace, arguments);
+        that.warn = function (message) {
+            warn(namespace, message);
         };
 
-        that.error = function () {
-            error(namespace, arguments);
+        that.error = function (message) {
+            error(namespace, message);
         };
 
-        that.info = function () {
-            info(arguments);
+        that.info = function (message) {
+            info(namespace, message);
         };
 
         return that;

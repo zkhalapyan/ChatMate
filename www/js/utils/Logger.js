@@ -2,54 +2,51 @@
 chatmate.utils.Logger = (function () {
     "use strict";
 
-    var formatOutput = function (namespace) {
-        return namespace + ": ";
+    var formatOutput = function (namespace, message) {
+        return namespace + ": " + message;
     };
 
-    var log = function (namespace) {
-        console.log(formatOutput(namespace));
+    var log = function (namespace, message) {
+        console.log(formatOutput(namespace, message));
     };
 
-    var debug = function (namespace) {
-        console.debug(formatOutput(namespace));
+    var debug = function (namespace, message) {
+        console.debug(formatOutput(namespace, message));
     };
 
-    var warn = function (namespace) {
-        console.warn(formatOutput(namespace), arguments);
+    var warn = function (namespace, message) {
+        console.warn(formatOutput(namespace, message));
     };
 
-    var error = function (namespace) {
-        console.error(formatOutput(namespace), arguments);
+    var error = function (namespace, message) {
+        console.error(formatOutput(namespace, message));
     };
 
-    var info = function (namespace) {
-        console.log(typeof arguments);
-        console.log(arguments);
-        console.log.apply(console, arguments);
-        console.info(formatOutput(namespace), arguments);
+    var info = function (namespace, message) {
+        console.info(formatOutput(namespace, message));
     };
 
     return function (namespace) {
         var that = {};
 
-        that.log = function () {
-            log(namespace);
+        that.log = function (message) {
+            log(namespace, message);
         };
 
-        that.debug = function () {
-            debug(namespace);
+        that.debug = function (message) {
+            debug(namespace, message);
         };
 
-        that.warn = function () {
-            warn(namespace, arguments);
+        that.warn = function (message) {
+            warn(namespace, message);
         };
 
-        that.error = function () {
-            error(namespace, arguments);
+        that.error = function (message) {
+            error(namespace, message);
         };
 
-        that.info = function () {
-            info(arguments);
+        that.info = function (message) {
+            info(namespace, message);
         };
 
         return that;

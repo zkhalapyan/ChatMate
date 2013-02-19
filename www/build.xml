@@ -35,9 +35,12 @@
         <concat destfile = "${build.js}" encoding = "UTF-8" fixlastline = "true" >
             <fileset dir = "${js}" includes = "**/${ant.project.name}.js"/>
         </concat>
+        <concat destfile = "${build.js}" encoding = "UTF-8" append="true" fixlastline = "true" >
+            <fileset dir = "${js}/utils" includes = "*"/>
+        </concat>
         <echo message = "Combining source files..."></echo>
         <concat destfile = "${build.js}" encoding = "UTF-8" append="true" fixlastline = "true">
-            <fileset dir = "${js}" includes = "**/*.js" excludes="**/${ant.project.name}.js"/>
+            <fileset dir = "${js}" includes = "**/*.js" excludes="**/${ant.project.name}.js, ${js}/utils/*"/>
         </concat>
     </target>
 

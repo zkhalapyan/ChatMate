@@ -7,6 +7,8 @@ chatmate.controllers.PageController = (function () {
 
     var pageCanvas = null;
 
+    var logger = chatmate.utils.Logger("PageController");
+
     var getPageCanvas = function () {
         if (pageCanvas === null) {
             pageCanvas = document.getElementById("page-canvas");
@@ -15,7 +17,7 @@ chatmate.controllers.PageController = (function () {
     };
 
     var displayPage = function (pageModel) {
-        console.log("PageController: Displaying page " + pageModel.getPageTitle());
+        logger.info("Displaying page " + pageModel.getPageTitle() + ".");
         var pageView = chatmate.models.PageView(pageModel);
         var canvas = getPageCanvas();
         canvas.innerHTML = "";
@@ -27,7 +29,7 @@ chatmate.controllers.PageController = (function () {
     };
 
     that.render = function (pageModel) {
-        console.log("PageController: Adding page model " + pageModel.getPageTitle() + " to history stack.");
+        logger.info("Adding page model " + pageModel.getPageTitle() + " to history stack.");
         pageHistoryStack.push(pageModel);
         displayPage(pageModel);
     };
@@ -38,7 +40,7 @@ chatmate.controllers.PageController = (function () {
 
     that.goBack = function () {
         pageHistoryStack.pop();
-        console.log("PageController: goBack() invoked.");
+        logger.info("goBack() invoked.");
         displayPage(pageHistoryStack[pageHistoryStack.length - 1]);
     };
 

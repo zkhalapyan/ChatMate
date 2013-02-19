@@ -675,8 +675,8 @@ chatmate.services.ChatServiceInitializer = function () {
     chatmate.services.ChatService = (function () {
         var that = {};
 
-        var serviceURL = "ws://localhost:3000";
-        var logger = chatmate.utils.Logger("chatmate.services.ChatService");
+        var serviceURL = "ws://rocking-apps.com:8080";
+        var logger = chatmate.utils.Logger("ChatService");
         var messageQueue = [];
         var socket = null;
         var onMessageCallback;
@@ -684,7 +684,6 @@ chatmate.services.ChatServiceInitializer = function () {
 
         var onOpenHandler = function (e) {
             logger.info("Opened connection.");
-            socket.binaryType = "arraybuffer";
             isSocketOpen = true;
         };
 
@@ -731,7 +730,7 @@ chatmate.services.ChatServiceInitializer = function () {
                 message : message
             };
             if (isSocketOpen) {
-                logger.info("Sent message: ", packet);
+                logger.info("Sent message: " + JSON.stringify(packet));
                 socket.send(JSON.stringify(packet));
             } else {
                 messageQueue.push(message);

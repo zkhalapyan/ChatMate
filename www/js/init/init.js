@@ -2,6 +2,8 @@
 $(document).ready(function () {
     "use strict";
 
+    chatmate.services.ChatServiceInitializer();
+
     // Page initializer for the home icon.
     chatmate.controllers.PageController.register("HomePage",  chatmate.init.ChatRooms);
 

@@ -3,7 +3,7 @@
  * @author Zorayr Khalapyan
  * @version 8/9/2012
  */
-chatmate.utils.TouchEnabledItemModel = (function () {
+mwf.decorator.TouchEnabledItemModel = (function () {
     "use strict";
     var that = {};
 

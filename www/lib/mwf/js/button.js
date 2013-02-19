@@ -74,7 +74,7 @@ mwf.decorator.Button = function(label, url, callback)
      * Sets the on click listener for this button.
      */
     button.click = function(callback){
-        TouchEnabledItemModel.bindTouchEvent(button, button, callback, "button-highlight");
+        mwf.decorator.TouchEnabledItemModel.bindTouchEvent(button, button, callback, "button-highlight");
     };
 
     button.setLabel(label);

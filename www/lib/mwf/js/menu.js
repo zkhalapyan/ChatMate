@@ -370,7 +370,7 @@ mwf.decorator.Menu = function(title)
             };
         };
 
-        TouchEnabledItemModel.bindTouchEvent(linkItem, linkItem, toggleSelectionCallback(inputItem), "menu-highlight");
+        mwf.decorator.TouchEnabledItemModel.bindTouchEvent(linkItem, linkItem, toggleSelectionCallback(inputItem), "menu-highlight");
 
         return linkItem;
     };

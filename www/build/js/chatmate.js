@@ -205,6 +205,8 @@ chatmate.init.NewChatRoom = (function () {
 $(document).ready(function () {
     "use strict";
 
+    chatmate.services.ChatServiceInitializer();
+
     // Page initializer for the home icon.
     chatmate.controllers.PageController.register("HomePage",  chatmate.init.ChatRooms);
 
@@ -371,78 +373,82 @@ chatmate.models.PageModel = (function () {
         return that;
     };
 }());
+
 /*global WebSocket: false */
 
-chatmate.services.ChatService = (function () {
+chatmate.services.ChatServiceInitializer = function () {
     "use strict";
-    var that = {};
 
-    var serviceURL = "ws://localhost:3000";
-    var logger = chatmate.utils.Logger("chatmate.services.ChatService");
-    var messageQueue = [];
-    var socket = null;
-    var onMessageCallback;
-    var isSocketOpen = false;
+    chatmate.services.ChatService = (function () {
+        var that = {};
 
-    var onOpenHandler = function (e) {
-        console.log("ChatService: Opened connection.");
-        socket.binaryType = "arraybuffer";
-        isSocketOpen = true;
-    };
+        var serviceURL = "ws://localhost:3000";
+        var logger = chatmate.utils.Logger("chatmate.services.ChatService");
+        var messageQueue = [];
+        var socket = null;
+        var onMessageCallback;
+        var isSocketOpen = false;
 
-    var onMessageHandler = function (e) {
-        var packet = $.parseJSON(e.data);
-        console.log("ChatService: Received message: " + e.data);
-
-        var chatRoomModel = chatmate.models.ChatRoomModelFactory.getChatRoomModel(packet.room);
-        chatRoomModel.addMessage(packet.message);
-
-        if (typeof onMessageCallback === "function") {
-            onMessageCallback(packet);
-        }
-    };
-
-    var onCloseHandler = function (e) {
-        isSocketOpen = false;
-    };
-
-    that.setOnMessageCallback = function (newOnMessageCallback) {
-        onMessageCallback = newOnMessageCallback;
-    };
-
-    that.run = function () {
-        if (socket === null) {
-            logger.info("Starting WebSocket.");
-            socket = new WebSocket(serviceURL);
-        }
-
-        socket.onerror = function (e) {
-            logger.error("Error occurred with the socket.");
-            logger.error(e);
+        var onOpenHandler = function (e) {
+            console.log("ChatService: Opened connection.");
+            socket.binaryType = "arraybuffer";
+            isSocketOpen = true;
         };
 
-        socket.onmessage = onMessageHandler;
-        socket.onopen    = onOpenHandler;
-        socket.onclose   = onCloseHandler;
-    };
+        var onMessageHandler = function (e) {
+            var packet = $.parseJSON(e.data);
+            console.log("ChatService: Received message: " + e.data);
 
-    that.sendMessage = function (chatRoomModel, message) {
-        chatRoomModel.addMessage(message);
-        var packet = {
-            room    : chatRoomModel.getTitle(),
-            message : message
+            var chatRoomModel = chatmate.models.ChatRoomModelFactory.getChatRoomModel(packet.room);
+            chatRoomModel.addMessage(packet.message);
+
+            if (typeof onMessageCallback === "function") {
+                onMessageCallback(packet);
+            }
         };
-        if (isSocketOpen) {
-            logger.info("Sent message: ", packet);
-            socket.send(JSON.stringify(packet));
-        } else {
-            messageQueue.push(message);
-        }
-    };
 
-    return that;
+        var onCloseHandler = function (e) {
+            isSocketOpen = false;
+        };
 
-}());
+        that.setOnMessageCallback = function (newOnMessageCallback) {
+            onMessageCallback = newOnMessageCallback;
+        };
+
+        that.run = function () {
+            if (socket === null) {
+                logger.info("Starting WebSocket.");
+                socket = new WebSocket(serviceURL);
+            }
+
+            socket.onerror = function (e) {
+                logger.error("Error occurred with the socket.");
+                logger.error(e);
+            };
+
+            socket.onmessage = onMessageHandler;
+            socket.onopen    = onOpenHandler;
+            socket.onclose   = onCloseHandler;
+        };
+
+        that.sendMessage = function (chatRoomModel, message) {
+            chatRoomModel.addMessage(message);
+            var packet = {
+                room    : chatRoomModel.getTitle(),
+                message : message
+            };
+            if (isSocketOpen) {
+                logger.info("Sent message: ", packet);
+                socket.send(JSON.stringify(packet));
+            } else {
+                messageQueue.push(message);
+            }
+        };
+
+        return that;
+
+    }());
+};
 /**
  * Memoization construct for caching namespace:key->value objects.
  *
@@ -712,79 +718,6 @@ chatmate.utils.Logger = (function () {
         return that;
     };
 }());
-/**
- * @constructor TouchEnabledModel
- * @author Zorayr Khalapyan
- * @version 8/9/2012
- */
-chatmate.utils.TouchEnabledItemModel = (function () {
-    "use strict";
-    var that = {};
-
-    var TOUCH_MOVE_SENSITIVITY = 15;
-
-    that.bindClickEvents = function (item, highlightItem, onClickCallback, onMouseoverHighlightClass) {
-        if (typeof onClickCallback === "function") {
-            $(item).mouseover(function () {
-                $(highlightItem).addClass(onMouseoverHighlightClass);
-            }).mouseout(function () {
-                $(highlightItem).removeClass(onMouseoverHighlightClass);
-            }).click(onClickCallback);
-        }
-    };
-
-    that.bindTouchEvents = function (item, highlightItem, onTouchCallback, onTouchHighlightClass) {
-
-        that.bindClickEvents(item, function (e) {
-            e.preventDefault();
-            return false;
-        });
-
-        var moveCounter;
-
-        $(item).bind("touchstart", function (e) {
-            moveCounter = 0;
-            $(highlightItem).addClass(onTouchHighlightClass);
-        });
-
-        $(item).bind("touchmove", function (e) {
-            if ($(highlightItem).is("." + onTouchHighlightClass)) {
-                moveCounter += 1;
-                var item = e.srcElement;
-                var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-                var elm = $(item).offset();
-                var x = touch.pageX - elm.left;
-                var y = touch.pageY - elm.top;
-                if (moveCounter > TOUCH_MOVE_SENSITIVITY || !((x < $(item).width() && x > 0) && (y < $(item).height() && y > 0))) {
-                    $(highlightItem).removeClass(onTouchHighlightClass);
-                }
-            }
-        });
-
-        $(item).bind("touchend", function (e) {
-            e.preventDefault();
-            if (moveCounter <= TOUCH_MOVE_SENSITIVITY && $(highlightItem).is("." + onTouchHighlightClass)) {
-                $(highlightItem).removeClass(onTouchHighlightClass);
-                if (typeof onTouchCallback === "function") {
-                    onTouchCallback(e);
-                }
-            }
-        });
-    };
-
-    that.bindTouchEvent = function (item, highlightItem, onTouchCallback, highlightClass) {
-        highlightItem = highlightItem || item;
-        highlightClass = highlightClass || "pressed";
-        if (chatmate.utils.DeviceDetection.isOnDevice()) {
-            that.bindTouchEvents(item, highlightItem, onTouchCallback, highlightClass);
-        } else {
-            that.bindClickEvents(item, highlightItem, onTouchCallback, highlightClass);
-        }
-    };
-
-    return that;
-}());
-
 chatmate.utils.UUIDGen = {
 
     generate : function () {
@@ -919,8 +852,9 @@ chatmate.views.ListView = (function () {
                     isEmptyList = false;
                 }
                 var menuItem = menu.addMenuLinkItem(label);
-                if (callback === undefined) {
-                    chatmate.utils.TouchEnabledItemModel.bindTouchEvent(menuItem, menuItem, callback, "menu-highlight");
+
+                if (callback !== undefined) {
+                    mwf.decorator.TouchEnabledItemModel.bindTouchEvent(menuItem, menuItem, callback, "menu-highlight");
                 }
             }
         };
@@ -1010,7 +944,7 @@ chatmate.models.PageView = (function () {
             document.getElementById("header-title").innerHTML = pageModel.getPageTitle();
             mwf.decorator.TopButton(pageModel.getTopButtonLabel(), null, pageModel.getTopButtonCallback(), true);
             var headerLink = document.getElementById("header-link");
-            chatmate.utils.TouchEnabledItemModel.bindTouchEvent(headerLink, headerLink, chatmate.controllers.PageController.openHomePage);
+            mwf.decorator.TouchEnabledItemModel.bindTouchEvent(headerLink, headerLink, chatmate.controllers.PageController.openHomePage);
             return pageModel.getContent();
         };
         return that;

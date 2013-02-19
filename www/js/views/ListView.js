@@ -16,8 +16,9 @@ chatmate.views.ListView = (function () {
                     isEmptyList = false;
                 }
                 var menuItem = menu.addMenuLinkItem(label);
-                if (callback === undefined) {
-                    chatmate.utils.TouchEnabledItemModel.bindTouchEvent(menuItem, menuItem, callback, "menu-highlight");
+
+                if (callback !== undefined) {
+                    mwf.decorator.TouchEnabledItemModel.bindTouchEvent(menuItem, menuItem, callback, "menu-highlight");
                 }
             }
         };

@@ -16,7 +16,7 @@ chatmate.services.ChatServiceInitializer = function () {
 
         var onOpenHandler = function (e) {
             logger.info("Opened connection.");
-            socket.binaryType = "arraybuffer";
+            socket.binaryType = "string";
             isSocketOpen = true;
         };
 

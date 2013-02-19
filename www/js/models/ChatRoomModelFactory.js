@@ -5,7 +5,7 @@ chatmate.models.ChatRoomModelFactory = (function () {
 
     var chatRoomModels = {};
 
-    that.addChatRoomModel = function(chatRoomModel) {
+    that.addChatRoomModel = function (chatRoomModel) {
         chatRoomModels[chatRoomModel.getTitle()] = chatRoomModel;
     };
 

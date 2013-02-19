@@ -1,8 +1,10 @@
 /**
+ * Memoization construct for caching namespace:key->value objects.
+ *
  * @constructor CacheService
  * @author Zorayr Khalapyan
  */
-var CacheService = (function () {
+chatmate.utils.CacheService = (function () {
     "use strict";
 
     var DEFAULT_NAMESPACE = 'global';

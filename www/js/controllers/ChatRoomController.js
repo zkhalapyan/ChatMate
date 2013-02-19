@@ -14,7 +14,7 @@ chatmate.controllers.ChatRoomController = (function () {
         };
 
         that.renderChatRoomMessages = function () {
-            chatRoomMessagesView = chatmate.views.ChatRoomMessagesView (that);
+            chatRoomMessagesView = chatmate.views.ChatRoomMessagesView(that);
             return chatRoomMessagesView.render();
         };
 

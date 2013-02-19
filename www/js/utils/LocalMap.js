@@ -6,15 +6,10 @@
  * @author Zorayr Khalapyan
  * @version 7/30/2012
  */
-var LocalMap = function (name) {
+chatmate.utils.LocalMap = function (name) {
     "use strict";
 
     var that = {};
-
-    //Prevent compatibility issues in different execution environments.
-    if (localStorage === undefined) {
-        var localStorage = {};
-    }
 
     if (localStorage[name] === undefined) {
         localStorage[name] = JSON.stringify({});
@@ -82,7 +77,7 @@ var LocalMap = function (name) {
 
 };
 
-LocalMap.destroy = function () {
+chatmate.utils.LocalMap.destroy = function () {
     "use strict";
     var item;
     for (item in localStorage) {
@@ -92,7 +87,7 @@ LocalMap.destroy = function () {
     }
 };
 
-LocalMap.exists = function (name) {
+chatmate.utils.LocalMap.exists = function (name) {
     "use strict";
     return (localStorage[name]) ? true : false;
 };

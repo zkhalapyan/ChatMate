@@ -1,10 +1,11 @@
+/*global WebSocket: false */
 
 chatmate.services.ChatService = (function () {
     "use strict";
     var that = {};
 
     var serviceURL = "ws://localhost:3000";
-
+    var logger = chatmate.utils.Logger("chatmate.services.ChatService");
     var messageQueue = [];
     var socket = null;
     var onMessageCallback;
@@ -23,7 +24,7 @@ chatmate.services.ChatService = (function () {
         var chatRoomModel = chatmate.models.ChatRoomModelFactory.getChatRoomModel(packet.room);
         chatRoomModel.addMessage(packet.message);
 
-        if (typeof (onMessageCallback) === "function") {
+        if (typeof onMessageCallback === "function") {
             onMessageCallback(packet);
         }
     };
@@ -38,13 +39,13 @@ chatmate.services.ChatService = (function () {
 
     that.run = function () {
         if (socket === null) {
-            console.log("ChatService: Starting WebSocket.");
+            logger.info("Starting WebSocket.");
             socket = new WebSocket(serviceURL);
         }
 
         socket.onerror = function (e) {
-            console.log("ChatService: Error occurred with the socket.");
-            console.log(e);
+            logger.error("Error occurred with the socket.");
+            logger.error(e);
         };
 
         socket.onmessage = onMessageHandler;
@@ -59,7 +60,7 @@ chatmate.services.ChatService = (function () {
             message : message
         };
         if (isSocketOpen) {
-            console.log("ChatService: Sent message: ", packet);
+            logger.info("Sent message: ", packet);
             socket.send(JSON.stringify(packet));
         } else {
             messageQueue.push(message);

@@ -15,7 +15,7 @@ $(document).ready(function () {
 
     chatmate.controllers.PageController.openChatRoomsView();
 
-    if (DeviceDetection.isDeviceAndroid()) {
+    if (chatmate.utils.DeviceDetection.isDeviceAndroid()) {
 
         var androidBackButtonCallback = function () {
             if (chatmate.controllers.PageController.canGoBack()) {
@@ -26,7 +26,7 @@ $(document).ready(function () {
             }
         };
 
-        var setBackButtonHandling = function() {
+        var setBackButtonHandling = function () {
             document.addEventListener("backbutton", androidBackButtonCallback, true);
         };
 

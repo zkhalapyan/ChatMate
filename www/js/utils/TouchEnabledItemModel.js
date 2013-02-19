@@ -3,14 +3,14 @@
  * @author Zorayr Khalapyan
  * @version 8/9/2012
  */
-var TouchEnabledItemModel = (function () {
+chatmate.utils.TouchEnabledItemModel = (function () {
     "use strict";
     var that = {};
 
     var TOUCH_MOVE_SENSITIVITY = 15;
 
     that.bindClickEvents = function (item, highlightItem, onClickCallback, onMouseoverHighlightClass) {
-        if (typeof (onClickCallback) === "function") {
+        if (typeof onClickCallback === "function") {
             $(item).mouseover(function () {
                 $(highlightItem).addClass(onMouseoverHighlightClass);
             }).mouseout(function () {
@@ -51,7 +51,7 @@ var TouchEnabledItemModel = (function () {
             e.preventDefault();
             if (moveCounter <= TOUCH_MOVE_SENSITIVITY && $(highlightItem).is("." + onTouchHighlightClass)) {
                 $(highlightItem).removeClass(onTouchHighlightClass);
-                if (typeof (onTouchCallback) === "function") {
+                if (typeof onTouchCallback === "function") {
                     onTouchCallback(e);
                 }
             }
@@ -61,7 +61,7 @@ var TouchEnabledItemModel = (function () {
     that.bindTouchEvent = function (item, highlightItem, onTouchCallback, highlightClass) {
         highlightItem = highlightItem || item;
         highlightClass = highlightClass || "pressed";
-        if (DeviceDetection.isOnDevice()) {
+        if (chatmate.utils.DeviceDetection.isOnDevice()) {
             that.bindTouchEvents(item, highlightItem, onTouchCallback, highlightClass);
         } else {
             that.bindClickEvents(item, highlightItem, onTouchCallback, highlightClass);

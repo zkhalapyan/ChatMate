@@ -1,5 +1,4 @@
 
-
 chatmate.config.ConfigManager = (function () {
     "use strict";
     var that = {};
@@ -14,13 +13,13 @@ chatmate.config.ConfigManager = (function () {
     /**
      * List of available servers.
      */
-    var SERVERS = [
+    var WS_SERVERS = [
 
         //Test server.
-        "https://test.ohmage.org",
+        "localhost",
 
         //Prod server.
-        "https://pilots.mobilizelabs.org"
+        "rocking-apps.com"
     ];
 
     /**
@@ -31,14 +30,14 @@ chatmate.config.ConfigManager = (function () {
     var config = {
 
         /**
-         * ohmage server URL.
+         * Server URL for communication.
          */
-        SERVER_ENDPOINT : SERVERS[(TEST_MODE) ? 0 : 1],
+        WS_SERVER_ENDPOINT : WS_SERVERS[(TEST_MODE) ? 0 : 1],
 
         /**
          * URL for reading campaigns.
          */
-        CAMPAIGN_READ_URL : '/app/campaign/read',
+        WS_PORT : 3000
 
 
     };
@@ -58,7 +57,7 @@ chatmate.config.ConfigManager = (function () {
      * Returns a list of available servers.
      */
     that.getServers = function () {
-        return SERVERS;
+        return WS_SERVERS;
     };
 
     var camelCaseGetterName, camelCaseSetterName;
@@ -70,7 +69,7 @@ chatmate.config.ConfigManager = (function () {
     /**
      * Creates a closure function to return the specified value. This is used
      * to iterate through all the config properties and create accessor
-     * functions to return the config's value.
+     * functions to return the configuration's value.
      */
     var addPropertyGetter = function (propertyName) {
         return function () {
@@ -84,11 +83,13 @@ chatmate.config.ConfigManager = (function () {
         };
     };
 
+    //Initialize configuration manager.
     (function () {
         var property,
             key;
         for (property in config) {
             if (config.hasOwnProperty(property)) {
+
                 //Convert CONSTANT_CASE to camelCase.
                 camelCaseGetterName = ("get_" + property.toLowerCase()).replace(/_([a-z])/g, toCamelCase);
                 camelCaseSetterName = ("set_" + property.toLowerCase()).replace(/_([a-z])/g, toCamelCase);

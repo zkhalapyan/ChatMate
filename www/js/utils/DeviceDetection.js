@@ -6,7 +6,7 @@
  * @author Zorayr Khalapyan
  * @version 02/08/2013
  */
-var DeviceDetection = (function () {
+chatmate.utils.DeviceDetection = (function () {
     "use strict";
     var that = {};
 

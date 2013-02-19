@@ -19,7 +19,7 @@ chatmate.models.PageModel = (function () {
             return pageContent;
         };
 
-        that.setPageTitle = function ( newPageTitle ) {
+        that.setPageTitle = function (newPageTitle) {
             pageTitle = newPageTitle;
         };
 
@@ -27,7 +27,7 @@ chatmate.models.PageModel = (function () {
             return pageTitle;
         };
 
-        that.setPageParams = function (newPageParam) {
+        that.setPageParams = function (newPageParams) {
             pageParams = newPageParams;
         };
 

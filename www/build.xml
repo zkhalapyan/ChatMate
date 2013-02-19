@@ -3,7 +3,7 @@
     <property name = "root"  location = "" />
     <property name = "js"    location = "${root}/js" />
     <property name = "tools" location = "${root}/tools" />
-    <property name = "lib" location = "${root}/lib" />
+    <property name = "lib"   location = "${root}/lib" />
     <property name = "build" location = "${root}/build" />
 
     <property name = "build.js"     location = "${build}/js/chatmate.js" />
@@ -23,9 +23,9 @@
 
     <target name = "lint">
         <echo message = "Running source files through JSLint..."></echo>
-        <jslint options = "newcap,vars,browser,node">
+        <jslint options = "newcap,vars,browser,node,devel,bitwise">
             <formatter type = "plain" />
-            <predef>dijkstra,$</predef>
+            <predef>mwf,chatmate,$</predef>
             <fileset dir = "${js}" includes = "**/*.js" />
         </jslint>
     </target>
@@ -33,11 +33,11 @@
     <target name = "concat">
         <echo message = "Combining package files..."></echo>
         <concat destfile = "${build.js}" encoding = "UTF-8" fixlastline = "true" >
-            <fileset dir = "${js}" includes = "**/package.js"/>
+            <fileset dir = "${js}" includes = "**/${ant.project.name}.js"/>
         </concat>
         <echo message = "Combining source files..."></echo>
         <concat destfile = "${build.js}" encoding = "UTF-8" append="true" fixlastline = "true">
-            <fileset dir = "${js}" includes = "**/*.js" excludes="**/package.js"/>
+            <fileset dir = "${js}" includes = "**/*.js" excludes="**/${ant.project.name}.js"/>
         </concat>
     </target>
 
@@ -50,9 +50,6 @@
             <sources dir ="${build}/js">
                 <file name = "chatmate.js"/>
             </sources>
-            <externs dir = "${lib}">
-                <file name = "jquery/jquery.js"/>
-            </externs>
         </jscomp>
     </target>
 

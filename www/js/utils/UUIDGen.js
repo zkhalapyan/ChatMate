@@ -1,4 +1,4 @@
-var UUIDGen = {
+chatmate.utils.UUIDGen = {
 
     generate : function () {
         "use strict";

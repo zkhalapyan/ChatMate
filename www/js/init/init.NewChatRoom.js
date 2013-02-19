@@ -1,13 +1,12 @@
 
-chatmate.init.NewChatRoom = (function() {
-
-    return function() {
+chatmate.init.NewChatRoom = (function () {
+    "use strict";
+    return function () {
         var newChatRoomModel = chatmate.models.ChatRoomModel("");
         var chatRoomController = chatmate.controllers.ChatRoomController(newChatRoomModel);
         var page = chatmate.models.PageModel("Create New Chat Room");
         page.setTopButton("Chat Rooms", chatmate.controllers.PageController.openChatRoomsView);
-        page.setPageContent( chatRoomController.renderChatRoom() );
+        page.setPageContent(chatRoomController.renderChatRoom());
         chatmate.controllers.PageController.render(page);
     };
-
 }());

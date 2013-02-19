@@ -1,0 +1,62 @@
+<project name = "ChatMate"  basedir = ".">
+
+    <property name = "root"  location = "" />
+    <property name = "js"    location = "${root}/js" />
+    <property name = "tools" location = "${root}/tools" />
+    <property name = "lib"   location = "${root}/lib" />
+    <property name = "build" location = "${root}/build" />
+
+    <property name = "build.js"     location = "${build}/js/chatmate.js" />
+    <property name = "build.min.js" location = "${build}/js/chatmate.min.js" />
+
+    <taskdef name = "jslint"
+             classname = "com.googlecode.jslint4java.ant.JSLintTask"
+             classpath = "${tools}/jslint4java-2.0.3/jslint4java-2.0.3.jar" />
+
+    <taskdef name = "jscomp"
+             classname = "com.google.javascript.jscomp.ant.CompileTask"
+             classpath = "${tools}/closure/compiler.jar"/>
+
+    <target name = "clean">
+        <delete dir = "${build}"/>
+    </target>
+
+    <target name = "lint">
+        <echo message = "Running source files through JSLint..."></echo>
+        <jslint options = "newcap,vars,browser,node,devel,bitwise">
+            <formatter type = "plain" />
+            <predef>mwf,chatmate,$</predef>
+            <fileset dir = "${js}" includes = "**/*.js" />
+        </jslint>
+    </target>
+
+    <target name = "concat">
+        <echo message = "Combining package files..."></echo>
+        <concat destfile = "${build.js}" encoding = "UTF-8" fixlastline = "true" >
+            <fileset dir = "${js}" includes = "**/${ant.project.name}.js"/>
+        </concat>
+        <concat destfile = "${build.js}" encoding = "UTF-8" append="true" fixlastline = "true" >
+            <fileset dir = "${js}/utils" includes = "*"/>
+        </concat>
+        <echo message = "Combining source files..."></echo>
+        <concat destfile = "${build.js}" encoding = "UTF-8" append="true" fixlastline = "true">
+            <fileset dir = "${js}" includes = "**/*.js" excludes="**/${ant.project.name}.js, ${js}/utils/*"/>
+        </concat>
+    </target>
+
+    <target name="min">
+        <echo message="Running Google Closure..."></echo>
+        <jscomp compilationLevel = "simple"
+                warning = "quiet"
+                debug = "true"
+                output = "${build.min.js}">
+            <sources dir ="${build}/js">
+                <file name = "chatmate.js"/>
+            </sources>
+        </jscomp>
+    </target>
+
+    <target name = "run" depends = "clean, lint, concat, min" />
+    <target name = "quick" depends = "clean, concat" />
+
+</project>

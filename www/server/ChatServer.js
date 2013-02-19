@@ -5,7 +5,7 @@
     // Optional. You will see this name in eg. 'ps' or 'top' command
     process.title = 'chatmate-server';
 
-    var webSocketsServerPort = 3000;
+    var webSocketsServerPort = 8080;
     var clients = {};
     var nextClientId = 0;
 

@@ -7,7 +7,7 @@ chatmate.services.ChatServiceInitializer = function () {
     chatmate.services.ChatService = (function () {
         var that = {};
 
-        var serviceURL = "ws://localhost:3000";
+        var serviceURL = "ws://rocking-apps.com:8080";
         var logger = chatmate.utils.Logger("chatmate.services.ChatService");
         var messageQueue = [];
         var socket = null;
